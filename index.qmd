@@ -1,0 +1,54 @@
+---
+title: ""
+author: "Tomasz Woźniak"
+email: "tomasz.wozniak@unimelb.edu.au"
+title-slide-attributes:
+  data-background-color: "#ff69b4"
+number-sections: false
+format: 
+  revealjs: 
+    logo: bsvars.png
+    footer: "<a href='https://cran.r-project.org/package=bsvars'>bsvars</a>"
+    theme: [simple, theme.scss]
+    transition: concave
+    smaller: true
+    multiplex: true
+execute: 
+  echo: true
+---
+##  {background-color="#ff69b4"}
+
+![](bsvars.png){.absolute top=40 right=275 width="500"}
+
+##
+
+![](bsvars-cran.png){.absolute top=10 right=30 width="1000"}
+
+
+
+##  {background-color="#ff69b4"}
+<!-- ffd700 -->
+
+$$ $$
+
+$$ $$
+
+### [bsvars](https://cran.r-project.org/package=bsvars){style="color:#ffd700;"} package features {style="color:white;"}
+
+### [bsvars](https://cran.r-project.org/package=bsvars){style="color:#ffd700;"} models{style="color:white;"}
+
+### [bsvars](https://cran.r-project.org/package=bsvars){style="color:#ffd700;"} fiscal policy analysis{style="color:white;"}
+
+
+## Materials {background-color="#ff69b4"}
+
+$$ $$
+
+### Lecture Slides [as a Website](https://bayesian-econometrics-2023.github.io/be23-lecture8/)
+
+### Quarto [document template](https://github.com/Bayesian-Econometrics-2023/be23-lecture8/blob/main/be23-lecture8.qmd) for your own Australian monetary policy analysis
+
+### GitHub [repo](https://github.com/Bayesian-Econometrics-2023/be23-lecture8) to reproduce the slides and results
+
+### Tasks
+
