@@ -73,19 +73,20 @@ save(
 )
 
 
-# # estimation results
-# ############################################################
-# rm(list = ls())
-# library(bsvars)
-# model = "nr"
-# model = "nr_ex"
-# load(paste0("bsvars_",model,".rda"))
-# 
-# apply(soe_bsvar$posterior$B, 1:2, mean)
-# 
-# soe_bsvar  |> compute_impulse_responses(horizon = 60) |> plot()
-# soe_bsvar_msh |> compute_impulse_responses(horizon = 24) |> plot()
-# soe_bsvar_msh |> compute_regime_probabilities() |> plot()
-# soe_bsvar_msh |> compute_conditional_sd() |> plot()
-# soe_bsvar_sv |> compute_impulse_responses(horizon = 60) |> plot()
-# soe_bsvar_sv |> compute_conditional_sd() |> plot()
+# estimation results
+############################################################
+rm(list = ls())
+library(bsvars)
+model = "nr"
+model = "nr_ex"
+model = "nr_ex_rw"
+load(paste0("bsvars_",model,".rda"))
+
+apply(soe_bsvar$posterior$B, 1:2, mean)
+
+soe_bsvar  |> compute_impulse_responses(horizon = 60) |> plot()
+soe_bsvar_msh |> compute_impulse_responses(horizon = 24) |> plot()
+soe_bsvar_msh |> compute_regime_probabilities() |> plot()
+soe_bsvar_msh |> compute_conditional_sd() |> plot()
+soe_bsvar_sv |> compute_impulse_responses(horizon = 60) |> plot()
+soe_bsvar_sv |> compute_conditional_sd() |> plot()

@@ -20,7 +20,7 @@ scp twozniak@spartan.hpc.unimelb.edu.au:/data/projects/punim0093/bsvars_mcxs/*rw
 sshpass -e ssh twozniak@spartan.hpc.unimelb.edu.au
 cd /data/projects/punim0093/bsvars_mcxs/
 
-sbatch bsvars_nr.slurm 
+sbatch bsvars_lr_p.slurm 
 squeue -u twozniak
 
 rm *.out
