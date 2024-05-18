@@ -1,6 +1,6 @@
 
 # lower-triangular
-model = "ur"
+model = "ur_p12"
 
 
 # install packages
@@ -20,7 +20,7 @@ library(bsvars)
 set.seed(123)
 
 N       = ncol(y)
-p       = 6
+p       = 12
 S_burn  = 1e4
 S       = 2e4
 thin    = 2

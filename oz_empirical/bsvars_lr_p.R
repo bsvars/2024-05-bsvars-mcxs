@@ -66,7 +66,7 @@ spec_bsvar_lr_sv |>
 ############################################################
 save(
   soe_bsvar,
-  soe_bsvar_msh,
+  # soe_bsvar_msh,
   soe_bsvar_sv,
   file = paste0("bsvars_",model,".rda")
 )

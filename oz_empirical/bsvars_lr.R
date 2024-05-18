@@ -66,24 +66,44 @@ spec_bsvar_lr_sv |>
 ############################################################
 save(
   soe_bsvar,
-  soe_bsvar_msh,
+  # soe_bsvar_msh,
   soe_bsvar_sv,
   file = paste0("bsvars_",model,".rda")
 )
 
 
-# # estimation results
-# ############################################################
+# estimation results
+############################################################
 # rm(list = ls())
-# library(bsvars)
+library(bsvars)
 # model = "lr"
-# model = "lr_ex"
+model = "lr_ex_p12"
 # model = "lr_ex_rw"
-# load(paste0("bsvars_",model,".rda"))
-# 
-# soe_bsvar  |> compute_impulse_responses(horizon = 24) |> plot()
-# soe_bsvar_msh |> compute_impulse_responses(horizon = 24) |> plot()
-# soe_bsvar_msh |> compute_regime_probabilities() |> plot()
-# soe_bsvar_msh |> compute_conditional_sd() |> plot()
-# soe_bsvar_sv |> compute_impulse_responses(horizon = 24) |> plot()
-# soe_bsvar_sv |> compute_conditional_sd() |> plot()
+# model = "lr_ex_p4"
+load(paste0("bsvars_",model,".rda"))
+
+bsvars_pink = "#ff69b4"
+bsvars_yell = "#ffd700"
+bsvars_grad = grDevices::colorRampPalette(c("#ff69b4", "#ffd700"))(N)
+
+plot(
+  as.ts(as.matrix(y), start = c(1969, 7), frequency = 12), 
+  main = "A small monetary system for Australia",
+  col = bsvars_grad,
+  lwd = 2,
+  bty = "n"
+)
+plot(
+  as.ts(as.matrix(x)[,1:4], start = c(1969, 7), frequency = 12), 
+  main = "A small system for Australian foreign sector",
+  col = bsvars_grad,
+  lwd = 2,
+  bty = "n"
+)
+
+soe_bsvar_sv |> compute_impulse_responses(horizon = 24) |> plot(probability = 0.68)
+soe_bsvar_sv |> compute_variance_decompositions(horizon = 24) |> plot()
+soe_bsvar_sv |> compute_historical_decompositions() |> plot()
+soe_bsvar_sv |> compute_fitted_values() |> plot(probability = 0.68)
+soe_bsvar_sv |> compute_structural_shocks() |> plot(probability = 0.68)
+soe_bsvar_sv |> compute_conditional_sd() |> plot(probability = 0.68)
