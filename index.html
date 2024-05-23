@@ -566,7 +566,7 @@
 <p><span class="math display">\[\begin{align}
 \text{conditional variance:}&amp;&amp;\sigma_{n.t}^2 &amp;= \exp\left\{\omega_n h_{n.t}\right\}\\
 \text{log-volatility:}&amp;&amp;h_{n.t} &amp;= \rho_n h_{n.t-1} + v_{n.t}\\
-\text{volatility innovation:}&amp;&amp;\tilde{v}_{n.t}&amp;\sim N\left(0,\sigma_v^2\right)\\
+\text{volatility innovation:}&amp;&amp;\tilde{v}_{n.t}&amp;\sim N\left(0,1\right)\\
 \text{autoregression:}&amp;&amp;\rho_n &amp;\sim U(-1,1)\\
 \text{volatility of the log-volatility:}&amp;&amp;\omega_n\mid \sigma_{\omega.n}^2 &amp;\sim N\left(0, \sigma_{\omega.n}^2\right)\\
 \text{hierarchy:}&amp;&amp;\sigma_{\omega.n}^2 \mid s_\sigma&amp;\sim G(s_\sigma, \underline{a}_\sigma)
@@ -1019,32 +1019,50 @@ bsvars: Bayesian Structural Vector Autoregressions|
 <section id="bsvars-modeling-of-monetary-policy-20" class="slide level2">
 <h2><a href="https://cran.r-project.org/package=bsvars" style="color:#ffd700;">bsvars</a> modeling of monetary policy</h2>
 <h3 id="extended-svar-sv-results.-4">Extended SVAR-SV results.</h3>
-<div class="cell" data-hash="index_cache/revealjs/ex_fv_03d0c36e634d0819fef83d7a4c1f066b">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>post_ex <span class="sc">|&gt;</span> <span class="fu">compute_fitted_values</span>() <span class="sc">|&gt;</span> <span class="fu">plot</span>(<span class="at">probability =</span> <span class="fl">0.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
+<div class="cell" data-hash="index_cache/revealjs/ex_sddr_2fba1808d7928f3e186745ecbe2db99e">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>post_ex <span class="sc">|&gt;</span> <span class="fu">verify_volatility</span>() <span class="ot">-&gt;</span> sddr</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>vv <span class="ot">=</span> <span class="fu">cbind</span>(sddr<span class="sc">$</span>logSDDR, <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(sddr<span class="sc">$</span>logSDDR)))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(vv) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"log(SDDR)"</span>, <span class="st">"Pr[w_n != 0|data]"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(vv) <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"shock "</span>, <span class="dv">1</span><span class="sc">:</span>N)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(vv, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        log(SDDR) Pr[w_n != 0|data]
+shock 1  -242.729             1.000
+shock 2  -218.592             1.000
+shock 3    -3.973             0.982
+shock 4  -244.784             1.000</code></pre>
 </div>
-<img data-src="index_files/figure-revealjs/ex_fv-1.png" width="960" class="r-stretch"></section>
+</div>
+</section>
 <section id="bsvars-modeling-of-monetary-policy-21" class="slide level2">
 <h2><a href="https://cran.r-project.org/package=bsvars" style="color:#ffd700;">bsvars</a> modeling of monetary policy</h2>
 <h3 id="extended-svar-sv-results.-5">Extended SVAR-SV results.</h3>
+<div class="cell" data-hash="index_cache/revealjs/ex_fv_03d0c36e634d0819fef83d7a4c1f066b">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>post_ex <span class="sc">|&gt;</span> <span class="fu">compute_fitted_values</span>() <span class="sc">|&gt;</span> <span class="fu">plot</span>(<span class="at">probability =</span> <span class="fl">0.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/ex_fv-1.png" width="960" class="r-stretch"></section>
+<section id="bsvars-modeling-of-monetary-policy-22" class="slide level2">
+<h2><a href="https://cran.r-project.org/package=bsvars" style="color:#ffd700;">bsvars</a> modeling of monetary policy</h2>
+<h3 id="extended-svar-sv-results.-6">Extended SVAR-SV results.</h3>
 <div class="cell" data-hash="index_cache/revealjs/ex_fore_32bd2cfd7cabb71730e42b20eef7cc16">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>post_ex <span class="sc">|&gt;</span> <span class="fu">forecast</span>(<span class="at">horizon =</span> <span class="dv">6</span>, <span class="at">exogenous_forecast =</span> xf) <span class="sc">|&gt;</span> <span class="fu">plot</span>(<span class="at">probability =</span> <span class="fl">0.68</span>, <span class="at">data_in_plot =</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>post_ex <span class="sc">|&gt;</span> <span class="fu">forecast</span>(<span class="at">horizon =</span> <span class="dv">6</span>, <span class="at">exogenous_forecast =</span> xf) <span class="sc">|&gt;</span> <span class="fu">plot</span>(<span class="at">probability =</span> <span class="fl">0.68</span>, <span class="at">data_in_plot =</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="index_files/figure-revealjs/ex_fore-1.png" width="960" class="r-stretch"></section>
-<section id="bsvars-modeling-of-monetary-policy-22" class="slide level2">
+<section id="bsvars-modeling-of-monetary-policy-23" class="slide level2">
 <h2><a href="https://cran.r-project.org/package=bsvars" style="color:#ffd700;">bsvars</a> modeling of monetary policy</h2>
 <h3 id="lower-triangular-svar-sv-results.">Lower-triangular SVAR-SV results.</h3>
 <div class="cell" data-hash="index_cache/revealjs/lt_irf_caa959dfe9ad7975dae00313b27f70a9">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>post_lt <span class="sc">|&gt;</span> <span class="fu">compute_impulse_responses</span>(<span class="at">horizon =</span> <span class="dv">24</span>) <span class="sc">|&gt;</span> <span class="fu">plot</span>(<span class="at">probability =</span> <span class="fl">0.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>post_lt <span class="sc">|&gt;</span> <span class="fu">compute_impulse_responses</span>(<span class="at">horizon =</span> <span class="dv">24</span>) <span class="sc">|&gt;</span> <span class="fu">plot</span>(<span class="at">probability =</span> <span class="fl">0.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="index_files/figure-revealjs/lt_irf-1.png" width="960" class="r-stretch"></section>
-<section id="bsvars-modeling-of-monetary-policy-23" class="slide level2">
+<section id="bsvars-modeling-of-monetary-policy-24" class="slide level2">
 <h2><a href="https://cran.r-project.org/package=bsvars" style="color:#ffd700;">bsvars</a> modeling of monetary policy</h2>
 <h3 id="unrestricted-svar-sv-results.">Unrestricted SVAR-SV results.</h3>
 <div class="cell" data-hash="index_cache/revealjs/ur_irf_ade7e55999959ad07721ac5935e0a87f">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>post_ur <span class="sc">|&gt;</span> <span class="fu">compute_impulse_responses</span>(<span class="at">horizon =</span> <span class="dv">24</span>) <span class="sc">|&gt;</span> <span class="fu">plot</span>(<span class="at">probability =</span> <span class="fl">0.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>post_ur <span class="sc">|&gt;</span> <span class="fu">compute_impulse_responses</span>(<span class="at">horizon =</span> <span class="dv">24</span>) <span class="sc">|&gt;</span> <span class="fu">plot</span>(<span class="at">probability =</span> <span class="fl">0.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="index_files/figure-revealjs/ur_irf-1.png" width="960" class="r-stretch"></section>

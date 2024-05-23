@@ -261,7 +261,7 @@ $$ $$
 \begin{align}
 \text{conditional variance:}&&\sigma_{n.t}^2 &= \exp\left\{\omega_n h_{n.t}\right\}\\
 \text{log-volatility:}&&h_{n.t} &= \rho_n h_{n.t-1} + v_{n.t}\\ 
-\text{volatility innovation:}&&\tilde{v}_{n.t}&\sim N\left(0,\sigma_v^2\right)\\
+\text{volatility innovation:}&&\tilde{v}_{n.t}&\sim N\left(0,1\right)\\
 \text{autoregression:}&&\rho_n &\sim U(-1,1)\\
 \text{volatility of the log-volatility:}&&\omega_n\mid \sigma_{\omega.n}^2 &\sim N\left(0, \sigma_{\omega.n}^2\right)\\
 \text{hierarchy:}&&\sigma_{\omega.n}^2 \mid s_\sigma&\sim G(s_\sigma, \underline{a}_\sigma)
@@ -990,6 +990,22 @@ post_ex |> compute_structural_shocks() |> plot(probability = 0.68)
 #| cache: true
 post_ex |> compute_conditional_sd() |> plot(probability = 0.68)
 ```
+
+
+## [bsvars](https://cran.r-project.org/package=bsvars){style="color:#ffd700;"} modeling of monetary policy
+
+### Extended SVAR-SV results.
+
+```{r ex_sddr}
+#| cache: true
+post_ex |> verify_volatility() -> sddr
+vv = cbind(sddr$logSDDR, 1 / (1 + exp(sddr$logSDDR)))
+colnames(vv) = c("log(SDDR)", "Pr[w_n != 0|data]")
+rownames(vv) = paste0("shock ", 1:N)
+round(vv, 3)
+```
+
+
 
 
 
