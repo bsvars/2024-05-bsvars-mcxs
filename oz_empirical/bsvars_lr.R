@@ -74,7 +74,7 @@ save(
 
 # estimation results
 ############################################################
-# rm(list = ls())
+rm(list = ls())
 library(bsvars)
 # model = "lr"
 model = "lr_ex_p12"

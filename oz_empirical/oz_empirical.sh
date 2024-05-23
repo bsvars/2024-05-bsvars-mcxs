@@ -13,7 +13,7 @@ sshpass -e scp oz_empirical/*.R twozniak@spartan.hpc.unimelb.edu.au:/data/projec
 sshpass -e scp oz_empirical/*.slurm twozniak@spartan.hpc.unimelb.edu.au:/data/projects/punim0093/bsvars_mcxs/
 
 # Download and upload RData files
-scp twozniak@spartan.hpc.unimelb.edu.au:/data/projects/punim0093/bsvars_mcxs/bsvars_lr_ex_p4.rda oz_empirical/
+scp twozniak@spartan.hpc.unimelb.edu.au:/data/projects/punim0093/bsvars_mcxs/bsvars_ur_p12.rda oz_empirical/
 
 # working with svar_betel on spartan
 #################################################

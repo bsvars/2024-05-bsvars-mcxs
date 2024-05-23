@@ -70,18 +70,19 @@ save(
 )
 
 
-# # estimation results
-# ############################################################
-# rm(list = ls())
-# library(bsvars)
+# estimation results
+############################################################
+rm(list = ls())
+library(bsvars)
 # model = "lr_ur_rw"
-# load(paste0("bsvars_",model,".rda"))
-# 
-# soe_bsvar_sv |> compute_impulse_responses(horizon = 24) |> plot(probability = 0.68)
-# soe_bsvar_sv |> compute_variance_decompositions(horizon = 24) |> plot()
+model = "ur_p12"
+load(paste0("bsvars_",model,".rda"))
+
+soe_bsvar_sv |> compute_impulse_responses(horizon = 24) |> plot(probability = 0.68)
+soe_bsvar_sv |> compute_variance_decompositions(horizon = 24) |> plot()
 # soe_bsvar_sv |> compute_historical_decompositions() |> plot()
-# soe_bsvar_sv |> compute_fitted_values() |> plot(probability = 0.68)
-# soe_bsvar_sv |> compute_structural_shocks() |> plot(probability = 0.68)
-# soe_bsvar_sv |> compute_conditional_sd() |> plot(probability = 0.68)
+soe_bsvar_sv |> compute_fitted_values() |> plot(probability = 0.68)
+soe_bsvar_sv |> compute_structural_shocks() |> plot(probability = 0.68)
+soe_bsvar_sv |> compute_conditional_sd() |> plot(probability = 0.68)
 
 
