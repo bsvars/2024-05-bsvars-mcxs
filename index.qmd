@@ -632,6 +632,7 @@ aud_USD   = xts::to.monthly(aud_USD, OHLC = FALSE, drop.time = TRUE)
 
 y               = na.omit(merge(aud_gdp, aud_pi, aud_IR, aud_USD))
 colnames(y)     = c("gdp", "pi", "IR", "USD")
+y         = y["1969-07/2023-09"]
 
 plot(
   y, 
@@ -848,7 +849,7 @@ spec_ex = specify_bsvar_sv$new(
   as.matrix(y),
   B = B,                          # extended identification
   p = p,
-  exogenous = x
+  exogenous = as.matrix(x)
 )
 spec_ex$prior$A = A_ols
 ```
@@ -996,6 +997,13 @@ post_ex |> compute_conditional_sd() |> plot(probability = 0.68)
 
 ### Extended SVAR-SV results.
 
+### Verify if shocks are homoskedastic.
+
+$$
+SDDR = \frac{p(\omega_n = 0\mid data)}{p(\omega_n = 0)}
+$$
+
+
 ```{r ex_sddr}
 #| cache: true
 post_ex |> verify_volatility() -> sddr
@@ -1038,6 +1046,54 @@ xf <- t(rbind(xfore[,2:7],xfore[,1:6]))
 post_ex |> forecast(horizon = 6, exogenous_forecast = xf) |> plot(probability = 0.68, data_in_plot = 0.1)
 ```
 
+
+
+## [bsvars](https://cran.r-project.org/package=bsvars){style="color:#ffd700;"} modeling of monetary policy
+
+### Extended SVAR-SV results.
+
+### Verify if exogenous variables are needed with SDDR.
+
+$$
+SDDR = \frac{p(\mathbf{A}_d = \mathbf{0}_{N \times d}\mid data)}{p(\mathbf{A}_d = \mathbf{0}_{N \times d})}
+$$
+```{r sddr_ex}
+#| cache: true
+
+A0 = array(NA, dim(A_ols))
+A0[,50:57] = 0
+post_ex |> verify_autoregression(hypothesis = A0) -> sddr_Ad
+vv = cbind(sddr_Ad$logSDDR, 1 / (1 + exp(sddr_Ad$logSDDR)))
+colnames(vv) = c("log(SDDR)", "Pr[A_d != 0|data]")
+rownames(vv) = paste0("H0: A_d = 0")
+round(vv, 3)
+
+```
+
+
+
+
+## [bsvars](https://cran.r-project.org/package=bsvars){style="color:#ffd700;"} modeling of monetary policy
+
+### Extended SVAR-SV results.
+
+### Verify if $EX_t$ Granger causes $\Delta rgdp_t$.
+
+$$
+SDDR = \frac{p(\mathbf{A}_{1.14} = \dots = \mathbf{A}_{12.14} = 0\mid data)}{p(\mathbf{A}_{1.14} = \dots = \mathbf{A}_{12.14} = 0)}
+$$
+
+```{r sddr_gc}
+#| cache: true
+
+A0 = array(NA, dim(A_ols))
+A0[1,seq(from = 4, to = 48, by = 4)] = 0
+post_ex |> verify_autoregression(hypothesis = A0) -> sddr_Gc
+vv = cbind(sddr_Gc$logSDDR, 1 / (1 + exp(sddr_Gc$logSDDR)))
+colnames(vv) = c("log(SDDR)", "Pr[A_{i.14} != 0|data] for all i")
+rownames(vv) = paste0("H0: A_{i.14} = 0")
+round(vv, 3)
+```
 
 ## [bsvars](https://cran.r-project.org/package=bsvars){style="color:#ffd700;"} modeling of monetary policy
 

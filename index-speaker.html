@@ -872,7 +872,7 @@ B_{0.41}&amp;B_{0.42}&amp;B_{0.43}&amp;B_{0.44}
 <section id="bsvars-modeling-of-monetary-policy-11" class="slide level2">
 <h2><a href="https://cran.r-project.org/package=bsvars" style="color:#ffd700;">bsvars</a> modeling of monetary policy</h2>
 <h3 id="specify-the-extended-svar-sv.">Specify the extended SVAR-SV.</h3>
-<div class="cell" data-hash="index_cache/revealjs/spec_ex_cada3b921ad6c00c1ec59f0f8c6aa248">
+<div class="cell" data-hash="index_cache/revealjs/spec_ex_e8123e362678ac9ad432e0c8da4d4348">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>B <span class="ot">=</span> <span class="fu">matrix</span>(<span class="cn">TRUE</span>, N, N)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>B[<span class="fu">upper.tri</span>(B)] <span class="ot">=</span> <span class="cn">FALSE</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>B[<span class="dv">3</span>,<span class="dv">4</span>] <span class="ot">=</span> <span class="cn">TRUE</span></span>
@@ -888,7 +888,7 @@ B_{0.41}&amp;B_{0.42}&amp;B_{0.43}&amp;B_{0.44}
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>(y),</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">B =</span> B,                          <span class="co"># extended identification</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> p,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">exogenous =</span> x</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">exogenous =</span> <span class="fu">as.matrix</span>(x)</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>spec_ex<span class="sc">$</span>prior<span class="sc">$</span>A <span class="ot">=</span> A_ols</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1019,6 +1019,10 @@ bsvars: Bayesian Structural Vector Autoregressions|
 <section id="bsvars-modeling-of-monetary-policy-20" class="slide level2">
 <h2><a href="https://cran.r-project.org/package=bsvars" style="color:#ffd700;">bsvars</a> modeling of monetary policy</h2>
 <h3 id="extended-svar-sv-results.-4">Extended SVAR-SV results.</h3>
+<h3 id="verify-if-shocks-are-homoskedastic.">Verify if shocks are homoskedastic.</h3>
+<p><span class="math display">\[
+SDDR = \frac{p(\omega_n = 0\mid data)}{p(\omega_n = 0)}
+\]</span></p>
 <div class="cell" data-hash="index_cache/revealjs/ex_sddr_2fba1808d7928f3e186745ecbe2db99e">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>post_ex <span class="sc">|&gt;</span> <span class="fu">verify_volatility</span>() <span class="ot">-&gt;</span> sddr</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>vv <span class="ot">=</span> <span class="fu">cbind</span>(sddr<span class="sc">$</span>logSDDR, <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(sddr<span class="sc">$</span>logSDDR)))</span>
@@ -1052,17 +1056,59 @@ shock 4  -244.784             1.000</code></pre>
 <img data-src="index_files/figure-revealjs/ex_fore-1.png" width="960" class="r-stretch"></section>
 <section id="bsvars-modeling-of-monetary-policy-23" class="slide level2">
 <h2><a href="https://cran.r-project.org/package=bsvars" style="color:#ffd700;">bsvars</a> modeling of monetary policy</h2>
+<h3 id="extended-svar-sv-results.-7">Extended SVAR-SV results.</h3>
+<h3 id="verify-if-exogenous-variables-are-needed-with-sddr.">Verify if exogenous variables are needed with SDDR.</h3>
+<p><span class="math display">\[
+SDDR = \frac{p(\mathbf{A}_d = \mathbf{0}_{N \times d}\mid data)}{p(\mathbf{A}_d = \mathbf{0}_{N \times d})}
+\]</span></p>
+<div class="cell" data-hash="index_cache/revealjs/sddr_ex_911f3518ba62df4a5025914b1c9501ae">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>A0 <span class="ot">=</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="fu">dim</span>(A_ols))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>A0[,<span class="dv">50</span><span class="sc">:</span><span class="dv">57</span>] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>post_ex <span class="sc">|&gt;</span> <span class="fu">verify_autoregression</span>(<span class="at">hypothesis =</span> A0) <span class="ot">-&gt;</span> sddr_Ad</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>vv <span class="ot">=</span> <span class="fu">cbind</span>(sddr_Ad<span class="sc">$</span>logSDDR, <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(sddr_Ad<span class="sc">$</span>logSDDR)))</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(vv) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"log(SDDR)"</span>, <span class="st">"Pr[A_d != 0|data]"</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(vv) <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"H0: A_d = 0"</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(vv, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                log(SDDR) Pr[A_d != 0|data]
+H0: A_d = 0 -1.346985e+15                 1</code></pre>
+</div>
+</div>
+</section>
+<section id="bsvars-modeling-of-monetary-policy-24" class="slide level2">
+<h2><a href="https://cran.r-project.org/package=bsvars" style="color:#ffd700;">bsvars</a> modeling of monetary policy</h2>
+<h3 id="extended-svar-sv-results.-8">Extended SVAR-SV results.</h3>
+<h3 id="verify-if-ex_t-granger-causes-delta-rgdp_t.">Verify if <span class="math inline">\(EX_t\)</span> Granger causes <span class="math inline">\(\Delta rgdp_t\)</span>.</h3>
+<p><span class="math display">\[
+SDDR = \frac{p(\mathbf{A}_{1.14} = \dots = \mathbf{A}_{12.14} = 0\mid data)}{p(\mathbf{A}_{1.14} = \dots = \mathbf{A}_{12.14} = 0)}
+\]</span></p>
+<div class="cell" data-hash="index_cache/revealjs/sddr_gc_20a639b18b0d0b4b8955930947b1a975">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>A0 <span class="ot">=</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="fu">dim</span>(A_ols))</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>A0[<span class="dv">1</span>,<span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">4</span>, <span class="at">to =</span> <span class="dv">48</span>, <span class="at">by =</span> <span class="dv">4</span>)] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>post_ex <span class="sc">|&gt;</span> <span class="fu">verify_autoregression</span>(<span class="at">hypothesis =</span> A0) <span class="ot">-&gt;</span> sddr_Gc</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>vv <span class="ot">=</span> <span class="fu">cbind</span>(sddr_Gc<span class="sc">$</span>logSDDR, <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(sddr_Gc<span class="sc">$</span>logSDDR)))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(vv) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"log(SDDR)"</span>, <span class="st">"Pr[A_{i.14} != 0|data] for all i"</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(vv) <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"H0: A_{i.14} = 0"</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(vv, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     log(SDDR) Pr[A_{i.14} != 0|data] for all i
+H0: A_{i.14} = 0 -2.835044e+16                                1</code></pre>
+</div>
+</div>
+</section>
+<section id="bsvars-modeling-of-monetary-policy-25" class="slide level2">
+<h2><a href="https://cran.r-project.org/package=bsvars" style="color:#ffd700;">bsvars</a> modeling of monetary policy</h2>
 <h3 id="lower-triangular-svar-sv-results.">Lower-triangular SVAR-SV results.</h3>
 <div class="cell" data-hash="index_cache/revealjs/lt_irf_caa959dfe9ad7975dae00313b27f70a9">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>post_lt <span class="sc">|&gt;</span> <span class="fu">compute_impulse_responses</span>(<span class="at">horizon =</span> <span class="dv">24</span>) <span class="sc">|&gt;</span> <span class="fu">plot</span>(<span class="at">probability =</span> <span class="fl">0.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>post_lt <span class="sc">|&gt;</span> <span class="fu">compute_impulse_responses</span>(<span class="at">horizon =</span> <span class="dv">24</span>) <span class="sc">|&gt;</span> <span class="fu">plot</span>(<span class="at">probability =</span> <span class="fl">0.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="index_files/figure-revealjs/lt_irf-1.png" width="960" class="r-stretch"></section>
-<section id="bsvars-modeling-of-monetary-policy-24" class="slide level2">
+<section id="bsvars-modeling-of-monetary-policy-26" class="slide level2">
 <h2><a href="https://cran.r-project.org/package=bsvars" style="color:#ffd700;">bsvars</a> modeling of monetary policy</h2>
 <h3 id="unrestricted-svar-sv-results.">Unrestricted SVAR-SV results.</h3>
 <div class="cell" data-hash="index_cache/revealjs/ur_irf_ade7e55999959ad07721ac5935e0a87f">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>post_ur <span class="sc">|&gt;</span> <span class="fu">compute_impulse_responses</span>(<span class="at">horizon =</span> <span class="dv">24</span>) <span class="sc">|&gt;</span> <span class="fu">plot</span>(<span class="at">probability =</span> <span class="fl">0.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>post_ur <span class="sc">|&gt;</span> <span class="fu">compute_impulse_responses</span>(<span class="at">horizon =</span> <span class="dv">24</span>) <span class="sc">|&gt;</span> <span class="fu">plot</span>(<span class="at">probability =</span> <span class="fl">0.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="index_files/figure-revealjs/ur_irf-1.png" width="960" class="r-stretch"></section>
